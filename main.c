@@ -27,7 +27,7 @@ void print_level_order(avl_node *_node) {
   }
   int _height = _node->height, cnt = _height, all_n = pow(2, _height + 1) * 10;
 
-  queue *q = malloc(sizeof(queue));
+  queue *q = (queue *)malloc(sizeof(queue));
   q->front = 0;
   queue_push(q, (queue_node){_node, 0});
 
@@ -78,9 +78,16 @@ void print_preorder(avl_node *_node) {
   print_preorder(_node->right);
 }
 
+void print_table() {
+  printf(">>>>>>>>>>>>>>>>OPERATION:<<<<<<<<<<<<<<<<<<<<\n");
+  printf("insert: 1. For example, \" 1 44\" means insert 44.\n");
+  printf("erase : 2. For example, \" 2 44\" means erase  44.\n");
+  printf("0 : exit\n");
+}
+
 int main() {
 
-  avl_tree *t = malloc(sizeof(avl_tree));
+  avl_tree *t = (avl_tree *)malloc(sizeof(avl_tree));
   t->root = NULL;
   insert(t, 100);
   printf("---------------------------------------------------------------------"
@@ -115,11 +122,36 @@ int main() {
   printf("---------------------------------------------------------------------"
          "---------------------------------------\n");
   print_level_order(t->root);
-  
+
   erase(t, 125);
   printf("---------------------------------------------------------------------"
          "---------------------------------------\n");
   print_level_order(t->root);
 
-  // getchar();
+  int flag;
+  print_table();
+  scanf("%d", &flag);
+  while (flag) {
+    int val;
+    scanf("%d", &val);
+    switch (flag) {
+    case 1:
+      insert(t, val);
+      printf("-----------------------------------------------------------------"
+             "----"
+             "---------------------------------------\n");
+      print_level_order(t->root);
+
+      break;
+    case 2:
+      erase(t, val);
+      printf("-----------------------------------------------------------------"
+             "----"
+            "---------------------------------------\n");
+      print_level_order(t->root);
+      break;
+    }
+    print_table();
+    scanf("%d", &flag);
+  }
 }

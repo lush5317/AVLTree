@@ -1,6 +1,8 @@
 #ifndef AVL_H
 #define AVL_H
-
+#ifdef __cplusplus
+extern "C" {
+#endif
 #include <stdlib.h>
 
 typedef struct avl_node {
@@ -77,5 +79,9 @@ void insert(avl_tree *t, int val);
 
 void erase_helper(avl_tree *t, avl_node *_node, int val);
 void erase(avl_tree *t, int val);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

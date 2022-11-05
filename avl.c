@@ -84,7 +84,7 @@ void insert(avl_tree *t, int val) {
   avl_node *cur = t->root, *parent = NULL;
   int flag = 0; // 0 -> left, 1 -> right
   if (cur == NULL) {
-    t->root = malloc(sizeof(avl_node));
+    t->root = (avl_node*)malloc(sizeof(avl_node));
     t->root->parent = t->root->left = t->root->right = NULL;
     t->root->val = val;
     update_height(t->root);
@@ -107,7 +107,7 @@ void insert(avl_tree *t, int val) {
   }
 
   // cur == NULL
-  cur = malloc(sizeof(avl_node));
+  cur = (avl_node*)malloc(sizeof(avl_node));
   cur->val = val;
   cur->left = cur->right = NULL;
   cur->parent = parent;
