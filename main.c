@@ -3,6 +3,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/**
+ * \033[1;31m  -> red
+ * \033[1;33m  -> yellow
+ * \033[0m     -> reset
+ */
+
 typedef struct queue_node {
   avl_node *_node;
   int has_parent;
@@ -44,14 +50,14 @@ void print_level_order(avl_node *_node) {
         queue_pop(q);
         queue_push(q, (queue_node){NULL, 0});
         queue_push(q, (queue_node){NULL, 0});
-        has_parent ? printf("%*s,%2d", offset - 4, "null", -1)
-                   : printf("%*s", offset, "");
+        has_parent ? printf("\033[0m%*s,%2d", offset - 4, "null", -1)
+                   : printf("\033[0m%*s", offset, "");
       } else {
         flag = 1;
         queue_push(q, (queue_node){_node->left, 1});
         queue_push(q, (queue_node){_node->right, 1});
         queue_pop(q);
-        printf("%*d,%2d", offset - 4, _node->val, height(_node));
+        printf("\033[1;33m%*d\033[0m,%2d", offset - 4, _node->val, height(_node));
       }
     }
     printf("\n\n");
@@ -65,7 +71,7 @@ void print_inorder(avl_node *_node) {
     return;
   }
   print_inorder(_node->left);
-  printf("%d ", _node->val);
+  printf("\033[1;33m%d ", _node->val);
   print_inorder(_node->right);
 }
 
@@ -73,60 +79,21 @@ void print_preorder(avl_node *_node) {
   if (_node == NULL) {
     return;
   }
-  printf("%d ", _node->val);
+  printf("\033[1;33m%d ", _node->val);
   print_preorder(_node->left);
   print_preorder(_node->right);
 }
 
 void print_table() {
-  printf(">>>>>>>>>>>>>>>>OPERATION:<<<<<<<<<<<<<<<<<<<<\n");
-  printf("insert: 1. For example, \" 1 44\" means insert 44.\n");
-  printf("erase : 2. For example, \" 2 44\" means erase  44.\n");
+  printf("\033[0m>>>>>>>>>>>>>>>>OPERATION:<<<<<<<<<<<<<<<<<<<<\n");
+  printf("insert: 1. For example, \"1 44\" means insert 44.\n");
+  printf("erase : 2. For example, \"2 44\" means erase  44.\n");
   printf("0 : exit\n");
 }
 
 int main() {
-
   avl_tree *t = (avl_tree *)malloc(sizeof(avl_tree));
   t->root = NULL;
-  insert(t, 100);
-  printf("---------------------------------------------------------------------"
-         "---------------------------------------\n");
-  print_level_order(t->root);
-  insert(t, 150);
-  printf("---------------------------------------------------------------------"
-         "---------------------------------------\n");
-  print_level_order(t->root);
-  insert(t, 125);
-  printf("---------------------------------------------------------------------"
-         "---------------------------------------\n");
-  print_level_order(t->root);
-  insert(t, 175);
-  printf("---------------------------------------------------------------------"
-         "---------------------------------------\n");
-  print_level_order(t->root);
-  insert(t, 50);
-  printf("---------------------------------------------------------------------"
-         "---------------------------------------\n");
-  print_level_order(t->root);
-  insert(t, 25);
-  printf("---------------------------------------------------------------------"
-         "---------------------------------------\n");
-  print_level_order(t->root);
-  insert(t, 75);
-
-  printf("---------------------------------------------------------------------"
-         "---------------------------------------\n");
-  print_level_order(t->root);
-  erase(t, 25);
-  printf("---------------------------------------------------------------------"
-         "---------------------------------------\n");
-  print_level_order(t->root);
-
-  erase(t, 125);
-  printf("---------------------------------------------------------------------"
-         "---------------------------------------\n");
-  print_level_order(t->root);
 
   int flag;
   print_table();
@@ -137,7 +104,7 @@ int main() {
     switch (flag) {
     case 1:
       insert(t, val);
-      printf("-----------------------------------------------------------------"
+      printf("\033[1;31m-----------------------------------------------------------------"
              "----"
              "---------------------------------------\n");
       print_level_order(t->root);
@@ -145,7 +112,7 @@ int main() {
       break;
     case 2:
       erase(t, val);
-      printf("-----------------------------------------------------------------"
+      printf("\033[1;31m-----------------------------------------------------------------"
              "----"
             "---------------------------------------\n");
       print_level_order(t->root);

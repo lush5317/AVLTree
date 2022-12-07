@@ -4,6 +4,7 @@
 extern "C" {
 #endif
 #include <stdlib.h>
+#include <X11/keysymdef.h>
 
 typedef struct avl_node {
   struct avl_node *parent;
@@ -46,7 +47,7 @@ static inline void child_replace(avl_node *old_child, avl_node *new_child,
   }
 }
 
-static inline avl_node *prior(avl_node *_node) {
+static inline avl_node *prev(avl_node *_node) {
   // _node has 2 children
   avl_node *ret = _node->left;
   while (ret->right != NULL) {

@@ -49,34 +49,41 @@ void rotate_right(avl_node *_node, avl_tree *t) {
 }
 
 void rebalence(avl_node *_node, avl_tree *t) {
-  avl_node *left = _node->left, *right = _node->right;
-  int lheight = height(left), rheight = height(right), flag = 0;
-  flag |= (lheight > rheight + 1);
-  flag |= ((rheight > lheight + 1) << 1);
-  if (flag == 0) {
-    return;
-  } else if (flag == 1) {
-    // left is higher than right
-    if (height(left->left) > height(left->right)) {
-      rotate_right(_node, t);
-      update_height(_node), update_height(_node->parent);
-    } else {
-      rotate_left(left, t);
-      update_height(left), update_height(left->parent);
-      rotate_right(_node, t);
-      update_height(_node), update_height(_node->parent);
+  while (_node) {
+    int _height = _node->height;
+    update_height(_node);
+
+    avl_node *left = _node->left, *right = _node->right;
+    int lheight = height(left), rheight = height(right), flag = 0;
+    flag |= (lheight > rheight + 1);
+    flag |= ((rheight > lheight + 1) << 1);
+    if (flag == 1) {
+      // left is higher than right
+      if (height(left->left) > height(left->right)) {
+        rotate_right(_node, t);
+        update_height(_node), update_height(_node->parent);
+      } else {
+        rotate_left(left, t);
+        update_height(left), update_height(left->parent);
+        rotate_right(_node, t);
+        update_height(_node), update_height(_node->parent);
+      }
+    } else if(flag == 2) {
+      // right is higher than left
+      if (height(right->right) > height(right->left)) {
+        rotate_left(_node, t);
+        update_height(_node), update_height(_node->parent);
+      } else {
+        rotate_right(right, t);
+        update_height(right), update_height(right->parent);
+        rotate_left(_node, t);
+        update_height(_node), update_height(_node->parent);
+      }
     }
-  } else {
-    // right is higher than left
-    if (height(right->right) > height(right->left)) {
-      rotate_left(_node, t);
-      update_height(_node), update_height(_node->parent);
-    } else {
-      rotate_right(right, t);
-      update_height(right), update_height(right->parent);
-      rotate_left(_node, t);
-      update_height(_node), update_height(_node->parent);
+    if (_height == _node->height) {
+      return;
     }
+    _node = _node->parent;
   }
 }
 
@@ -84,7 +91,7 @@ void insert(avl_tree *t, int val) {
   avl_node *cur = t->root, *parent = NULL;
   int flag = 0; // 0 -> left, 1 -> right
   if (cur == NULL) {
-    t->root = (avl_node*)malloc(sizeof(avl_node));
+    t->root = (avl_node *)malloc(sizeof(avl_node));
     t->root->parent = t->root->left = t->root->right = NULL;
     t->root->val = val;
     update_height(t->root);
@@ -107,22 +114,14 @@ void insert(avl_tree *t, int val) {
   }
 
   // cur == NULL
-  cur = (avl_node*)malloc(sizeof(avl_node));
+  cur = (avl_node *)malloc(sizeof(avl_node));
   cur->val = val;
   cur->left = cur->right = NULL;
   cur->parent = parent;
   flag ? (parent->right = cur) : (parent->left = cur);
 
   update_height(cur);
-  while (parent) {
-    int height = parent->height;
-    update_height(parent);
-    rebalence(parent, t);
-    if (height == parent->height) {
-      break;
-    }
-    parent = parent->parent;
-  }
+  rebalence(cur->parent, t);
 }
 
 void erase_helper(avl_tree *t, avl_node *_node, int val) {
@@ -140,25 +139,24 @@ void erase_helper(avl_tree *t, avl_node *_node, int val) {
     if (flag == 0) {
       // no child
       child_replace(_node, NULL, _node->parent, t);
+      rebalence(_node->parent, t);
       free(_node);
     } else if (flag == 1) {
       // only has left child
       child_replace(_node, _node->left, _node->parent, t);
       _node->left->parent = _node->parent;
+      rebalence(_node->parent, t);
       free(_node);
     } else if (flag == 2) {
       // only has right child
       child_replace(_node, _node->right, _node->parent, t);
       _node->right->parent = _node->parent;
+      rebalence(_node->parent, t);
       free(_node);
     } else {
-      avl_node *pre = prior(_node);
+      avl_node *pre = prev(_node);
       swap(pre, _node);
-      child_replace(pre, pre->left, pre->parent, t);
-      if (pre->left != NULL) {
-        pre->left->parent = pre->parent;
-      }
-      free(pre);
+      erase_helper(t, pre, val);
     }
   }
 }
