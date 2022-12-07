@@ -1,8 +1,10 @@
 #ifndef AVL_H
 #define AVL_H
+
 #ifdef __cplusplus
 extern "C" {
 #endif
+
 #include <stdlib.h>
 
 typedef struct avl_node {
