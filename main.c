@@ -57,7 +57,8 @@ void print_level_order(avl_node *_node) {
         queue_push(q, (queue_node){_node->left, 1});
         queue_push(q, (queue_node){_node->right, 1});
         queue_pop(q);
-        printf("\033[1;33m%*d\033[0m,%2d", offset - 4, _node->val, height(_node));
+        printf("\033[1;33m%*d\033[0m,%2d", offset - 4, _node->val,
+               height(_node));
       }
     }
     printf("\n\n");
@@ -87,8 +88,10 @@ void print_preorder(avl_node *_node) {
 void print_table() {
   printf("\033[0m>>>>>>>>>>>>>>>>OPERATION:<<<<<<<<<<<<<<<<<<<<\n");
   printf("insert: 1. For example, \"1 44\" means insert 44.\n");
-  printf("erase : 2. For example, \"2 44\" means erase  44.\n");
-  printf("0 : exit\n");
+  printf("erase: 2. For example, \"2 44\" means erase  44.\n");
+  printf("print tree by level order: 3\n");
+  printf("print tree by inorder: 4\n");
+  printf("exit: 0\n");
 }
 
 int main() {
@@ -100,23 +103,43 @@ int main() {
   scanf("%d", &flag);
   while (flag) {
     int val;
-    scanf("%d", &val);
     switch (flag) {
     case 1:
+      scanf("%d", &val);
       insert(t, val);
-      printf("\033[1;31m-----------------------------------------------------------------"
+      printf("\033[1;31m-------------------------------------------------------"
+             "----------"
              "----"
              "---------------------------------------\n");
       print_level_order(t->root);
 
       break;
     case 2:
+      scanf("%d", &val);
       erase(t, val);
-      printf("\033[1;31m-----------------------------------------------------------------"
+      printf("\033[1;31m-------------------------------------------------------"
+             "----------"
              "----"
-            "---------------------------------------\n");
+             "---------------------------------------\n");
       print_level_order(t->root);
       break;
+    case 3:
+      printf("\033[1;31m-------------------------------------------------------"
+             "----------"
+             "----"
+             "---------------------------------------\n");
+      print_level_order(t->root);
+      break;
+    case 4:
+      printf("\033[1;31m-------------------------------------------------------"
+             "----------"
+             "----"
+             "---------------------------------------\n");
+      print_inorder(t->root);
+      printf("\n\n");
+      break;
+    default:
+      fprintf(stderr, "no such opertion\n");
     }
     print_table();
     scanf("%d", &flag);

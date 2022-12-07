@@ -4,7 +4,6 @@
 extern "C" {
 #endif
 #include <stdlib.h>
-#include <X11/keysymdef.h>
 
 typedef struct avl_node {
   struct avl_node *parent;

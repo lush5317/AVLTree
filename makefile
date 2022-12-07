@@ -12,4 +12,4 @@ main: main.o avl.o
 	$(cc) main.o avl.o -lm -o main
 
 clean:
-	rm *.o main
+	rm *.o
