@@ -82,6 +82,8 @@ void insert(avl_tree *t, int val);
 void erase_helper(avl_tree *t, avl_node *_node, int val);
 void erase(avl_tree *t, int val);
 
+void delete_tree(avl_node *_node);
+
 #ifdef __cplusplus
 }
 #endif

@@ -162,3 +162,12 @@ void erase_helper(avl_tree *t, avl_node *_node, int val) {
 }
 
 void erase(avl_tree *t, int val) { erase_helper(t, t->root, val); }
+
+void delete_tree(avl_node *_node) {
+  if (_node == NULL) {
+    return; 
+  } 
+  delete_tree(_node->left);
+  delete_tree(_node->right);
+  free(_node);
+}

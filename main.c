@@ -2,6 +2,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 /**
  * \033[1;31m  -> red
@@ -34,7 +35,9 @@ void print_level_order(avl_node *_node) {
   int _height = _node->height, cnt = _height, all_n = pow(2, _height + 1) * 10;
 
   queue *q = (queue *)malloc(sizeof(queue));
+  q->size = 0;
   q->front = 0;
+  memset(q->a, 0, sizeof(q->a) / sizeof(queue_node));
   queue_push(q, (queue_node){_node, 0});
 
   // check if existing a node has parent
@@ -65,6 +68,7 @@ void print_level_order(avl_node *_node) {
     fflush(stdout);
     cnt--;
   }
+  free(q);
 }
 
 void print_inorder(avl_node *_node) {
@@ -144,4 +148,6 @@ int main() {
     print_table();
     scanf("%d", &flag);
   }
+  delete_tree(t->root);
+  free(t);
 }
