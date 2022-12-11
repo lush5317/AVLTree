@@ -3,3 +3,5 @@
 *.o
 main
 test_avl
+*.zip
+*.mp4
